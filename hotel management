@@ -1,0 +1,121 @@
+
+print("Welcome to Hotel Hestia")
+ch = "y"
+import random
+d = {}
+from tabulate import tabulate
+ch = input('Start the program(y/n)')
+while ch == "y":
+    print("1. Enter customer data for booking: ")
+    print("2. Checkout")
+    print("3. Restaurent Bill")
+    print("4. Payment ")
+    print("5. Search for room details")
+    print('6. Print data')
+    print('7. Exit')
+    choice = int(input('Enter your choice: '))
+    if choice == 1:
+      print("Please enter the following details: ")
+      name = input("Enter your full name: ")
+      emailid = input("Enter your email id: ")
+      pno = input("Enter your phone number: ")
+      chkin = input("Enter date of check in: ")
+      chkout = input("Enter date of check out: ")
+      a = int(input('Enter no. of days of stay: '))
+      print("Select room type:")
+      print("1) Economy")
+      print('2) Delux')
+      print('3) Suite')
+      print('Do you want see Room prices/package? Enter 0')
+      x = int(input('Enter room type your choice: '))
+      if x==0:
+        print('1) Economy \nTwo single beds without room service : ₹10000')
+        print('2) Delux \nTwo double beds with room service and complementry breakfast: ₹30000')
+        print('3) Suite \nTwo double beds with room service, all complemetry meals and other services such as spa, gym etc: ₹75000')
+        x=int(input('Enter room type of choice: '))
+        
+      if x == 1:
+          roomno = random.randrange(100, 200)
+          if roomno not in d:
+            d[roomno] = [name, emailid, pno, [chkin], [chkout],a,0,'-']
+          print(roomno, d[roomno])
+      elif x == 2:
+        roomno = random.randrange(200, 300)
+        if roomno not in d:
+          d[roomno] = [name, emailid, pno, [chkin], [chkout],a,0,'-']
+          print(roomno, d[roomno])
+      elif x == 3:
+        roomno = random.randrange(300, 400)
+        if roomno not in d:
+                d[roomno] = [name, emailid, pno, [chkin], [chkout],a,0,'-']
+                print(roomno, d[roomno])
+    elif choice == 2:
+      print('CHECKOUT')
+      roomno = int(input('Enter your Room No: '))
+      if d[roomno][7]=='Payment Complete':
+        del d[roomno]
+      else:
+        print('Make payment before checkout!')
+    elif choice == 3:
+      choice1 = input('Are you a resident in the hotel(y/n)?')
+      roomno=int(input('Enter room no:'))
+      choice2 = int(input('Choose: \n 1.Alakart \n 2.Buffet \n:'))
+      if choice2 == 1:
+            food = int(input('Enter no. of food items taken:'))
+            drink = int(input('Enter no.of beverages taken:'))
+            dessert = int(input('Enter no.of dessert items taken:'))
+            total = (food * 1000) + (drink * 500) + (dessert + 250)
+      elif choice2 == 2:
+          adult = int(input('Enter no. of adults: '))
+          kid = int(input('Enter no. of kids: '))
+          total = (adult * 2000) + (kid * 1500)
+      tax = (15 / 100) * total
+      bill = total + tax
+      if choice1 == 'y’:
+            d[roomno][6] = bill
+      elif choice1 == 'n’:
+            print(
+                '*********************** RESTAURENT BILL ***********************')
+            print('Amount:₹', total)
+            print('Tax:   ₹', tax)
+            print('TOTAL: ₹', bill)
+            print('----------------------- Payment Successful ----------------------')
+    elif choice == 4:
+        roomno = int(input('Enter your Room no.'))
+        days = d[roomno][5]
+        if roomno in range(100, 200):
+            roomrent = 10000 * days
+        elif roomno in range(200, 300):
+            roomrent = 30000 * days
+        elif roomno in range(300, 400):
+            roomrent = 75000 * days
+        restaurent_bill = d[roomno][6]
+        amt = restaurent_bill + roomrent
+        tax = 0.07 * amt
+        bill = amt + tax
+        print('MODES OF PAYMENT:')
+        print('1.Cash')
+        print('2.Credit/Debit Card')
+        print('3.Paytm/Google pay')
+        print('4.Cheque')
+        choice3 = int(input('Enter your mode of payment:'))
+        choice4 = input('Do you want a customer copy of bill? (y/n)')
+        if choice4 == 'y’:
+            print('*********************** HOTEL BILL***********************')
+            print('Customer Name:  ₹', d[roomno][0])
+            print('Room Rent:      ₹',roomrent)
+            print('Restaurent Bill:₹',restaurent_bill)
+            print('Tax(7%):        ₹',tax )
+            print('TOTAL:          ₹',bill)
+            print('------------------------ Payment Successful -----------------------')
+            print('**********************************************************')
+        d[roomno][7] = 'Payment Complete'
+    elif choice == 5:
+      a=int(input('Enter room no:'))
+      print(d.get(a,'Not In System'))
+    elif choice == 6:
+      header=list(d.keys())
+      print(tabulate(d,header))
+    elif choice == 7:
+      print('Exit')
+      break
